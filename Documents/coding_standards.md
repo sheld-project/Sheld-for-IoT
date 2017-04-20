@@ -1,6 +1,9 @@
 # Coding Standars
 
-## Worning Information  
+## First !  
+* 一行目からの数行はコメントアウトして、プログラムの名前、なにをするプログラムなのかを書き込む  
+
+## Worning Information  
 * コンパイル時の警告レベルは必ず最大に警告ゼロでコンパイルを終えるようにすること  
 
 ## File Name
