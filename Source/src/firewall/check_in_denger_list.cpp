@@ -45,4 +45,9 @@ public:
       // 何もヒットしなかった時
       return true;
     }
+
+    /* デストラクタの追加 */
+  ~CheckInDengerList(){
+
+  }
 };
