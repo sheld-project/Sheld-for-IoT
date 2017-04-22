@@ -20,10 +20,10 @@ private:
 public:
   /* クラス変数の初期化 */
   CheckInDengerList(
-  // 引数としてのTargetString
-  std::string arg_target,
-  // 引数としてのDengerStringList
-  std::vector<std::string> arg_list
+    // 引数としてのTargetString
+    std::string arg_target,
+    // 引数としてのDengerStringList
+    std::vector<std::string> arg_list
   )
   {
     // プロパティの設定
