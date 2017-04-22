@@ -17,6 +17,10 @@ int main()
   std::vector<std::string> test_list = {"a","b","c"};
 
   // 文字のチェック
-  CheckInDengerList check_in_denger_list(test_string,test_list);
-  std::cout << check_in_denger_list.isSafe() << std::endl;
+  CheckInDengerList *check_in_denger_list;
+  check_in_denger_list = new CheckInDengerList(test_string,test_list);
+  std::cout << check_in_denger_list->isSafe() << std::endl;
+
+  // メモリの確保
+  delete check_in_denger_list;
 }
