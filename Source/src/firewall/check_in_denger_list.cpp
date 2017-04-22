@@ -46,7 +46,7 @@ public:
       return true;
     }
 
-    /* デストラクタの追加 */
+    /* デストラクタ */
   ~CheckInDengerList(){
 
   }
