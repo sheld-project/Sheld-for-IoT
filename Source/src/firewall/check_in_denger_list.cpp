@@ -3,6 +3,7 @@
 ターゲットに含まれていないか確認するプログラム
 */
 
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -29,4 +30,19 @@ public:
     TargetString = arg_target;
     DengerStringList = arg_list;
   }
+
+  /* TargetString内に、DengerStringListに
+  格納された文字列が含まれていないか確認する */
+  bool isSafe(){
+      for(std::string denger_string : DengerStringList){
+        // ヒットするか調べる（-1でノーヒット）
+        int hit_count = (int)TargetString.find(denger_string);
+        // ヒットした時
+        if(hit_count != -1){
+          return false;
+        }
+      }
+      // 何もヒットしなかった時
+      return true;
+    }
 };

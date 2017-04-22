@@ -18,5 +18,5 @@ int main()
 
   // 文字のチェック
   CheckInDengerList check_in_denger_list(test_string,test_list);
-  std::cout << "hello" << std::endl;
+  std::cout << check_in_denger_list.isSafe() << std::endl;
 }
