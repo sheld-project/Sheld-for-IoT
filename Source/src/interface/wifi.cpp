@@ -4,7 +4,6 @@ Wi-Fiの制御＆インターフェース.
 
 #include <string>
 #include <map>
-#include <iostream>
 
 #include <ESP8266WiFi.h>
 
