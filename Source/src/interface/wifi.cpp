@@ -38,7 +38,7 @@ public:
   }
 
   /* Wi-Fiに接続する */
-  bool ConnectWifi()
+  bool connectWifi()
   {
     // 接続
     status = WiFi.begin(
@@ -59,13 +59,13 @@ public:
   }
 
   /* クライアントを待つ */
-  void WaitClient()
+  void waitClient()
   {
         client = server.available();
   }
 
   /* TCPストリームを行うクラス */
-  std::string TcpStream(){
+  std::string tcpStream(){
     // result
     std::string response = "";
 
