@@ -13,7 +13,7 @@ WiFi_ *wifi;
 void setup()
 {
   bool is_connected = false;
-  while (is_connected)
+  while (!is_connected)
   {
     // 接続
     wifi = new WiFi_("ssid","password","host");
@@ -28,7 +28,7 @@ void loop()
   // クライアントを待つ
   wifi->waitClient();
 
-  while(1)
+  while(true)
   {
     // データの受け取り
     result += wifi->tcpStream();
