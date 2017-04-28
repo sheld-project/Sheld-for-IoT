@@ -12,25 +12,28 @@ WiFi_ *wifi;
 
 void setup()
 {
-  bool is_connected = false;
-  while (!is_connected)
-  {
-    // 接続
-    wifi = new WiFi_("ssid","password","host");
-    is_connected = wifi->connectWifi();
-    delay(50);
-  }
+  Serial.begin(9600);
+
+  // 接続
+  wifi = new WiFi_("netoneto-NET","pythonhaiizo");
+  wifi->connectWifi();
+
+  Serial.print("Connect");
+
+  // IPアドレス
+  IPAddress ip = WiFi.localIP();
+  Serial.println(ip);
+
+  // サーバの立ち上げ
+  wifi->set_server();
+  Serial.print("start");
 }
 
 void loop()
 {
-  std::string result = "";
-  // クライアントを待つ
-  wifi->waitClient();
+  std::string packet = "";
 
-  while(true)
-  {
-    // データの受け取り
-    result += wifi->tcpStream();
-  }
+  // データの受け取り
+  packet = wifi->tcpStream();
+  Serial.print(packet.c_str());
 }

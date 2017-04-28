@@ -17,63 +17,52 @@ private:
   {
       {"SSID",""},
       {"PASS",""},
-      {"HOST",""}
   };
-  WiFiServer server = WiFiServer(80);
-  WiFiClient client;
-  int status = WL_IDLE_STATUS;
+  WiFiServer server  = WiFiServer(4000);
+
 
 public:
   /* プロパティの初期化 */
   WiFi_(
     std::string arg_ssid,
-    std::string arg_password,
-    std::string arg_host
+    std::string arg_password
   )
   {
     CONNECTION_PROPERTY["SSID"] = arg_ssid;
     CONNECTION_PROPERTY["PASS"] = arg_password;
-    CONNECTION_PROPERTY["HOST"] = arg_host;
   }
 
   /* Wi-Fiに接続する */
-  bool connectWifi()
+  void connectWifi()
   {
     // 接続
-    status = WiFi.begin(
-      CONNECTION_PROPERTY["SSID"].c_str(),
-      CONNECTION_PROPERTY["PASS"].c_str()
-    );
+    WiFi.mode(WIFI_STA);
+    WiFi.begin("netoneto-NET","pythonhaiizo");
 
-    // 接続できたらTrue,失敗したらFalseを返す
-    if ( status == WL_CONNECTED)
+    while (WiFi.status() != WL_CONNECTED)
     {
-      server.begin();
-      return true;
-    }
-    else
-    {
-      return false;
+      delay(1000);
+      Serial.print(".");
     }
   }
 
-  /* クライアントを待つ */
-  void waitClient()
+  /* サーバの立ち上げ */
+  void set_server()
   {
-        client = server.available();
+    server.begin();
   }
 
-  /* TCPストリームを行うクラス */
-  std::string tcpStream(){
-    // result
-    std::string response = "";
+  /* TCPストリーム */
+  std::string tcpStream()
+  {
+    std::string packet = "";
+    WiFiClient client = server.available();
 
-    // クライアントが来たら、受け取ったバイト列の長さが100になるまで受け取る
-    while(response.length() < 100)
+    while (client && client.available() > 0)
     {
-      response += client.read();
+      packet += client.read();
     }
 
-    return response;
+    return packet;
   }
 };
