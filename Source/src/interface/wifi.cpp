@@ -47,7 +47,7 @@ public:
   }
 
   /* サーバの立ち上げ */
-  void set_server()
+  void setServer()
   {
     server.begin();
   }
