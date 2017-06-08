@@ -5,6 +5,7 @@
 #include <SD.h>
 
 
+/* --- SDの制御クラス --- */
 class SD_
 {
 private:
