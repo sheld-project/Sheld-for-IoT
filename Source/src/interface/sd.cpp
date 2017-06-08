@@ -41,7 +41,7 @@ public:
   }
 
   /* SDカードの遮断 */
-  void close()
+  ~SD_()
   {
     file.close();
   }
