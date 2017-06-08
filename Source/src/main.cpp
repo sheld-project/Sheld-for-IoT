@@ -12,7 +12,7 @@
 
 WiFi_ *wifi;
 SD_ *sd;
-std::string config;
+static std::string config;
 
 void setup()
 {
@@ -26,7 +26,6 @@ void setup()
   config = sd->readfFile();
 
   // 接続を切る
-  sd->close();
   delete sd;
 
   // Wifi接続
