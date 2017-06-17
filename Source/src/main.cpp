@@ -4,33 +4,44 @@
 */
 
 #include <string>
+#include <vector>
+
 #include <Arduino.h>
 
 #include "./interface/wifi.cpp"
 #include "./interface/sd.cpp"
-
+#include "./tool.cpp"
 
 WiFi_ *wifi;
 SD_ *sd;
-static std::string config;
+Tool *tool;
+std::vector<std::string> config;
+
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
+
+  tool = new Tool();
 
   // SD接続
-  sd = new SD_("/.config");
-  while (!sd->connectSD())  // 接続待ち
+  sd = new SD_("config", 16);
+  while (!sd->connect()){
+  }  // 接続待ち
 
-  // SD読み取り
-  config = sd->readfFile();
+  // SD内のコンフィグを読み取り
+  std::string config_str = sd->readfFile();
+  config = tool->split(config_str,'\n');
 
   // 接続を切る
   delete sd;
 
-  // Wifi接続
-  wifi = new WiFi_("ssid","pass");
+  Serial.print(config_str.c_str());
+  Serial.print("Get Config");
 
+
+  // Wifi接続
+  wifi = new WiFi_(config[0], config[1]);
   wifi->connectWifi();
 
   Serial.print("Connect");
@@ -50,5 +61,12 @@ void loop()
 
   // データの受け取り
   packet = wifi->tcpStream();
-  Serial.print(packet.c_str());
+
+  // チェック
+  bool is_secure_packet = tool -> checkInTarget(packet, config);
+  if(is_secure_packet){
+    Serial.print(packet.c_str());
+  }else{
+    Serial.print("not secure packet");
+  }
 }
