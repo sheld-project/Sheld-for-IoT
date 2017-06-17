@@ -10,24 +10,25 @@ class SD_
 {
 private:
   File file;
-  std::string file_body;
+  std::string FileBody;
+  std::string PATH;
+  int CS;
 
 public:
   /* ファイルパス等の設定 */
-  SD_(std::string path)
+  SD_(std::string path,int cs)
   {
-    file = SD.open(path.c_str());
+    PATH = path;
+    CS = cs;
   }
 
-  /* SD カードとの接続待ち*/
-  bool connectSD()
+  /* SD カードとの接続*/
+  bool connect()
   {
-    if (file) {
-      return true;
-    } else {
-    // if the file didn't open, print an error:
-    return false;
-    }
+    bool is_sd_begin = SD.begin(CS);
+    file = SD.open(PATH.c_str(), FILE_READ);
+
+    return is_sd_begin && file;
   }
 
   /* ファイルを文字列として読み込む */
@@ -35,9 +36,10 @@ public:
   {
     while (file.available())
     {
-      file.read();
+      char char_byte = (char)file.read();
+      FileBody = FileBody + char_byte;
     }
-    return file_body;
+    return FileBody;
   }
 
   /* SDカードの遮断 */

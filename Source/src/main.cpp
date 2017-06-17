@@ -16,15 +16,15 @@ static std::string config;
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
 
   // SD接続
-  sd = new SD_("/.config");
-  while (!sd->connectSD())  // 接続待ち
+  sd = new SD_("config", 16);
+  while (!sd->connect()){
+  }  // 接続待ち
 
   // SD読み取り
   config = sd->readfFile();
-
   // 接続を切る
   delete sd;
 
