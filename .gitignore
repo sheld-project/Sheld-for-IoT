@@ -29,3 +29,8 @@
 *.app
 .pioenvs
 .piolibdeps
+.clang_complete
+.gcc-flags.json
+
+# tmp program
+tmp.cpp
