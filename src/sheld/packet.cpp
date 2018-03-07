@@ -1,20 +1,18 @@
 /**
- * @file sheld.cpp
- * @brief Sheldwallを通した通信を行う
+ * @file packet.cpp
+ * @brief Sheldwallを通した通信で送信されるオブジェクト
  * @author akakou
  * @date 2018/03/07
  */
 
 #include <string>
 #include <map>
-#include <vector>
-#include <iostream>
 
 
 /**
- * @brief Sheldwallを通した通信を行うオブジェクト
+ * @brief Sheldwallを通した通信で送信されるオブジェクト
  */
-class Sheld {
+class Packet {
 public:
     // SheldのURL
     std::string SheldURL;
@@ -29,7 +27,7 @@ public:
      * @param (headers) ヘッダ情報
      * @param (parameters) パラメータ
      */
-    Sheld(
+    Packet(
         std::string sheld_url,
         std::map<std::string, std::string> headers,
         std::map<std::string, std::string> parameters
@@ -61,22 +59,11 @@ public:
             request  += "\nConnection: " + Headers["Connection"];
         }
 
-
         if (Headers["Method"] == "POST"){
-            /* Content Lengthを設定 */
-            // Conent Lengthを計算
-            int parameter_length = 0;
-
-            std::map<std::string, std::string>::iterator it;
-            for(it = Parameters.begin(); it!=Parameters.end(); it++) {
-                parameter_length += it -> first.length() + it -> second.length() + 2;
-            }
-
-            parameter_length --;
-
-            // Cotent-Lengthを足す
-            request += "\nContent-Length: " + std::to_string(parameter_length);
+            // ConnectionがあればConnectionも足す
+            request  += "\nContent-Length: " + Headers["Content-Length"];
         }
+
 
         std::map<std::string, std::string>::iterator it;
         for(it = Headers.begin(); it!=Headers.end(); it++) {
@@ -88,6 +75,7 @@ public:
               && it -> first != "Version"
               && it -> first != "Host"
               && it -> first != "Connection"
+              && it -> first != "Content-Length"
             ){
                 request += "\n" + it -> first + ": " + it -> second;
             }
