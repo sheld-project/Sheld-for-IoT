@@ -4,10 +4,13 @@
  * @author akakou
  * @date 2018/03/07
  */
- #include <string>
- #include <map>
+#include <stdio.h>
 
- #include "packet.cpp"
+#include <string>
+#include <sstream>
+#include <map>
+
+#include "packet.cpp"
 
 
  /**
@@ -22,23 +25,23 @@ private:
     * @param (parameters) パラメータ
     */
     bool isCorrectArgument(
-      std::string sheld_url,
+      //std::string sheld_url,
       std::map<std::string, std::string> headers,
       std::map<std::string, std::string> parameters
     ){
         if(0 >= headers.count("Method")){
             Log = "Method is not defined";
         }
-        if(0 >= headers.count("URL")){
-            Log = "URL is not defined";
+        if(0 >= headers.count("URI")){
+            Log = "URI is not defined";
         }
         if(0 >= headers.count("Version")){
           Log = "Version is not defined";
         }
-
         if(0 >= headers.count("Host")){
           Log = "Host is not defined";
         }
+
         return false;
     }
     /**
@@ -77,20 +80,36 @@ public:
 
     /**
      * @brief Packetインスタンスの生成
-     * @param (sheld_url) SheldのURL
+     * @param (headers) ヘッダ情報
+     */
+    Packet* generatePacket(std::map<std::string, std::string> headers){
+        std::map<std::string, std::string> parameters = {};
+        return generatePacket(headers, parameters);
+    }
+
+    /**
+     * @brief Packetインスタンスの生成
      * @param (headers) ヘッダ情報
      * @param (parameters) パラメータ
      */
     Packet* generatePacket(
-      std::string sheld_url,
+      //std::string sheld_url,
       std::map<std::string, std::string> headers,
       std::map<std::string, std::string> parameters
     ){
         if (headers["Method"] == "POST"){
+            // Content-Lengthを取得
             int content_length = calculateContentLength(headers, parameters);
-            headers["Content-Length"] = std::to_string(content_length);
+
+            // intをstringに変換
+            std::stringstream stream;
+            stream << content_length;
+            std::string length_string = stream.str();
+
+            // 格納
+            headers["Content-Length"] = length_string;
         }
 
-        return new Packet(sheld_url, headers, parameters);
+        return new Packet(headers, parameters);
     }
  };

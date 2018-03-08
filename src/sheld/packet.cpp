@@ -8,14 +8,15 @@
 #include <string>
 #include <map>
 
+#ifndef PacketClassDefined
+#define PacketClassDefined
+
 
 /**
  * @brief Sheldwallを通した通信で送信されるオブジェクト
  */
 class Packet {
 public:
-    // SheldのURL
-    std::string SheldURL;
     // メソッド等
     std::map<std::string, std::string> Headers;
     // パラメータ
@@ -23,17 +24,14 @@ public:
 
     /**
      * @brief コンストラクタ
-     * @param (sheld_url) SheldのURL
      * @param (headers) ヘッダ情報
      * @param (parameters) パラメータ
      */
     Packet(
-        std::string sheld_url,
         std::map<std::string, std::string> headers,
         std::map<std::string, std::string> parameters
       ){
         // 引数を各フィールドに格納
-        SheldURL = sheld_url;
         Headers = headers;
         Parameters = parameters;
     }
@@ -51,17 +49,17 @@ public:
 
         if (0 < Headers.count("Host")){
             // HostがあればHostも足す
-            request +=  "\nHost: " + Headers["Host"];
+            request +=  "\r\nHost: " + Headers["Host"];
         }
 
         if (0 < Headers.count("Connection")){
             // ConnectionがあればConnectionも足す
-            request  += "\nConnection: " + Headers["Connection"];
+            request  += "\r\nConnection: " + Headers["Connection"];
         }
 
         if (Headers["Method"] == "POST"){
             // ConnectionがあればConnectionも足す
-            request  += "\nContent-Length: " + Headers["Content-Length"];
+            request  += "\r\nContent-Length: " + Headers["Content-Length"];
         }
 
 
@@ -77,15 +75,14 @@ public:
               && it -> first != "Connection"
               && it -> first != "Content-Length"
             ){
-                request += "\n" + it -> first + ": " + it -> second;
+                request += "\r\n" + it -> first + ": " + it -> second;
             }
         }
 
+        request += "\r\n\r\n";
+
         /* リクエストボディの作成 */
         if (Headers["Method"] == "POST"){
-
-            request += "\n\n";
-
             for(it = Parameters.begin(); it!=Parameters.end(); it++) {
                 // メソッドとホストではない、
                 // 各ヘッダをリクエストに足していく
@@ -98,3 +95,5 @@ public:
         return request;
      }
 };
+
+#endif
